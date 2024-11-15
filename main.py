@@ -20,6 +20,8 @@ def upload_file():
     if 'file' not in request.files:
         return "no file uploaded"
     file = request.files['file']
+    defect_list = request.form.get("defect-list")
+    white_list = request.form.get("white-list")
 
     if file.filename == '':
         return redirect(request.url)
@@ -28,7 +30,7 @@ def upload_file():
         filename = secure_filename(file.filename)
         save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(save_path)
-        result =  get_defect(save_path)
+        result =  get_defect(save_path, defect_list, white_list)
         response = jsonify(result)
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response

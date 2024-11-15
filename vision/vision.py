@@ -9,11 +9,23 @@ def encode_image(image_path):
     return base64.b64encode(image_file.read()).decode('utf-8')
 
 
-def get_defect(image_path):
+def get_defect(image_path, defect_list, white_list):
   # Path to your image
   
   # Getting the base64 string
   base64_image = encode_image(image_path)
+
+  prompt = "Is there a defect in this fabric? Say yes if there's a >= 65% chance of defect, otherwise no. \
+              Please provide a reason for your response and explain approximately where you see the defect in the image."
+
+  if (defect_list):
+    prompt += "Also call out the defect type from the following list: " + defect_list
+
+  if (white_list):
+    prompt += "The following are not considered defects: " + white_list
+
+  print("PROMPT: ", prompt)
+              
   
   response = client.chat.completions.create(
     model="gpt-4o",
@@ -23,7 +35,7 @@ def get_defect(image_path):
         "content": [
           {
             "type": "text",
-            "text": "Is there a defect in this fabric? Say yes if there's a >= 65% chance of defect, otherwise no. Also provide a reason for your response. Please also explain approximately where you see the defect in the image.",
+            "text": prompt
           },
           {
             "type": "image_url",
