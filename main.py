@@ -1,5 +1,5 @@
 import os
-from flask import Flask, flash, request, redirect, url_for
+from flask import Flask, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from vision.vision import get_defect
 
@@ -17,21 +17,19 @@ def allowed_file(filename):
 def upload_file():
     # check if the post request has the file part
     if 'file' not in request.files:
-        flash('No file part')
-        return redirect(request.url)
+        return "no file uploaded"
     file = request.files['file']
 
     if file.filename == '':
-        flash('No selected file')
         return redirect(request.url)
+
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(save_path)
-        get_defect(save_path)
-        return redirect(url_for('download_file', name=filename))
+        return str(get_defect(save_path))
     return "", 200
 
 @app.route('/health', methods=['GET'])
 def healthy():
-    return get_defect("ab"), 200
+    return "i'm healthy, thanks", 200
