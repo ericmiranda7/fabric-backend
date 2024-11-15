@@ -23,7 +23,7 @@ def get_defect(image_path):
         "content": [
           {
             "type": "text",
-            "text": "Is there a defect in this fabric? Say yes if there's a >= 50% chance of defect, otherwise no. Also provide a reason for your response.",
+            "text": "Is there a defect in this fabric? Say yes if there's a >= 65% chance of defect, otherwise no. Also provide a reason for your response. Please also explain approximately where you see the defect in the image.",
           },
           {
             "type": "image_url",
