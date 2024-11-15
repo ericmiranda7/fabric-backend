@@ -23,7 +23,7 @@ def get_defect(image_path):
         "content": [
           {
             "type": "text",
-            "text": "Is there a defect in this fabric? Say yes if there's a >= 50% chance of defect, otherwise no.",
+            "text": "Is there a defect in this fabric? Say yes if there's a >= 50% chance of defect, otherwise no. Also provide a reason for your response.",
           },
           {
             "type": "image_url",
@@ -38,7 +38,10 @@ def get_defect(image_path):
   
   is_defective = response.choices[0].message.content.lower().find("yes") != -1
   print(response.choices[0].message.content, is_defective)
-  return is_defective
+  return {
+    "is_defective": is_defective,
+    "reason": response.choices[0].message.content
+  }
 
 
 image_path = "../datasets/defective/hole/34.jpg"

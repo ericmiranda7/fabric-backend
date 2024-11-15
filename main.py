@@ -28,8 +28,8 @@ def upload_file():
         filename = secure_filename(file.filename)
         save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(save_path)
-        isDefective =  str(get_defect(save_path))
-        response = jsonify('isDefective', isDefective)
+        result =  get_defect(save_path)
+        response = jsonify(result)
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response
 
