@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, redirect, url_for
+from flask import Flask, request, redirect, jsonify
 from werkzeug.utils import secure_filename
 from vision.vision import get_defect
 
@@ -12,6 +12,7 @@ app.config['UPLOAD_FOLDER'] = "./uploaded-images"
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @app.route('/defect', methods=['POST'])
 def upload_file():
@@ -27,8 +28,10 @@ def upload_file():
         filename = secure_filename(file.filename)
         save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(save_path)
-        return str(get_defect(save_path))
-    return "", 200
+        isDefective =  str(get_defect(save_path))
+        response = jsonify('isDefective', isDefective)
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
 @app.route('/health', methods=['GET'])
 def healthy():
